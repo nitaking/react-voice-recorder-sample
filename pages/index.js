@@ -1,40 +1,40 @@
 import Head from 'next/head'
+import { useReactMediaRecorder} from 'react-media-recorder';
 import styles from '../styles/Home.module.css'
-import {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 
 export default function Home() {
+
+  const {
+    status,
+    startRecording,
+    stopRecording,
+    resumeRecording,
+    pauseRecording,
+    mediaBlobUrl,
+  } = useReactMediaRecorder({ audio: true });
+
   const [audio, setAudio] = useState()
   const [isNowRecording, setIsNowRecording] = useState(false)
 
   let recorder
 
   function onStart() {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-      recorder = new MediaRecorder(stream)
-
-      recorder.addEventListener('dataavailable', e => {
-        // e.data にデータが入っているのでデータ処理はこちらから
-        setAudio(e.data)
-
-      })
-
-      recorder.start()
-      // setIsNowRecording(true)
-    }).catch((e) => {
-      throw new Error('録音に失敗しました')
-    })
+    startRecording()
+    setIsNowRecording(true)
   }
   function onPause() {
-    recorder?.pause()
+    pauseRecording()
   }
   function onResume() {
-    recorder?.resume()
+    resumeRecording()
   }
   function onStop() {
-    recorder?.stop()
-    // setIsNowRecording(false)
+    stopRecording()
+    setIsNowRecording(false)
   }
+
 
   return (
     <div className={styles.container}>
@@ -75,12 +75,17 @@ export default function Home() {
             <button onClick={onStop} type="button" className="m-1">Stop</button>
           </div>
           <div className={styles.card}>
-            <audio src={audio && URL.createObjectURL(audio)} controls />
+            {/*<p>{status}</p>*/}
+            {/*<button onClick={startRecording}>Start Recording</button>*/}
+            {/*<button onClick={stopRecording}>Stop Recording</button>*/}
+
+            <audio src={mediaBlobUrl} controls />
           </div>
 
 
-          {isNowRecording ? <p>録音中</p> : <p>録音可能</p>}
+
           <div className={styles.card}>
+            {isNowRecording ? <p>録音中</p> : <p>録音可能</p>}
           </div>
         </div>
       </main>
