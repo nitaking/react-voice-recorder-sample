@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useReactMediaRecorder} from 'react-media-recorder';
 import styles from '../styles/Home.module.css'
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 
 export default function Home() {
@@ -15,10 +15,8 @@ export default function Home() {
     mediaBlobUrl,
   } = useReactMediaRecorder({ audio: true });
 
-  const [audio, setAudio] = useState()
   const [isNowRecording, setIsNowRecording] = useState(false)
 
-  let recorder
 
   function onStart() {
     startRecording()
@@ -75,9 +73,6 @@ export default function Home() {
             <button onClick={onStop} type="button" className="m-1">Stop</button>
           </div>
           <div className={styles.card}>
-            {/*<p>{status}</p>*/}
-            {/*<button onClick={startRecording}>Start Recording</button>*/}
-            {/*<button onClick={stopRecording}>Stop Recording</button>*/}
 
             <audio src={mediaBlobUrl} controls />
           </div>
